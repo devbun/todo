@@ -1,38 +1,91 @@
+body {
+  overflow-y: scroll; /* Show vertical scrollbar */
+  word-wrap: break-word;  
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+button {
+  margin-bottom: 0.5rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
+.btn {
+  width: 4rem;
+  height: 1.25rem;
+  padding: .25rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: .25rem;
+  cursor: pointer;
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  border-radius: 5px;
+  box-shadow: 0px 2px 3px #888888;
+  transition: all .1s ease-in-out;
+  border: 1px solid;
 }
 
-.App-link {
-  color: #61dafb;
+.todoTable {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.5rem;
+  width: 200px;
+  border: 1px solid grey;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.todoCard {
+  border: 1px solid grey;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
 }
+
+.todoTopBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+  .done-button {
+    height: 1rem;
+    width: 1rem;
+    margin-right: 1rem;
+  }
+
+  .done {
+    background-color: lightgreen;
+
+  }
+
+  .notdone {
+    background-color: lightgrey;
+  }
+
+  .newtodo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height:200px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .new-todo-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding:0.5rem;
+  }
+
+  .new-todo-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width:100%;
+    margin-bottom: 0.5 rem;
+  }
