@@ -179,6 +179,7 @@ class NewTodo extends React.Component {
     this.expand = this.expand.bind(this);
     this.collapse = this.collapse.bind(this);
     this.addHandle = this.addHandle.bind(this);
+    this.handleEnter = this.handleEnter.bind(this);
 }
 
 expand() {
@@ -194,6 +195,13 @@ addHandle() {
   this.collapse()
 }
 
+handleEnter(e) {
+  var key = e.key
+  if (key == "Enter") {
+    this.addHandle()
+  }
+}
+
 render() {
 
   if (this.state.expand == false ) {
@@ -203,7 +211,7 @@ render() {
     </div>
   )} else {
     return (
-      <div className="newtodo">
+      <div className="newtodo" onKeyPress={(e) => this.handleEnter(e)}>
             <div className="new-todo-row">
               {/* <label htmlFor="title">Title: </label> */}
               <input name="title" type="text" id="entry" placeholder='Please enter title...' autoFocus />
@@ -211,10 +219,10 @@ render() {
             
               <div className="new-todo-row">
               {/* <label htmlFor="entry-description">Description: </label> */}
-              <input type="textarea" id="entry-description" placeholder='Please enter description...' />
+              <input type="textarea" id="entry-description" placeholder='Please enter description...' autoComplete="off" />
               </div>
 
-              <div className="new-todo-row">
+              {/* <div className="new-todo-row">
               <label htmlFor="entry-description">Start: </label>
               <input type="date" id="new-todo-start" name="new-todo-start"  />
               </div>
@@ -222,7 +230,7 @@ render() {
               <div className="new-todo-row">
               <label htmlFor="entry-description">Deadline: </label>
               <input type="date" id="new-todo-deadline" name="new-todo-deadline"  />
-              </div>
+              </div> */}
           
             <div className="new-todo-row">     
               <label htmlFor="Low">Priority: </label>

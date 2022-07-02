@@ -69,6 +69,7 @@ button {
 }
 
 .todoCard {
+  /* width: 225px; */
   background-color: white;
   border: 1px solid white;
   padding: 0.5rem;
@@ -116,7 +117,7 @@ button {
     align-items: flex-start;
     justify-content: flex-start;
     width: 200px;
-    height:100px;
+    height:200px;
     margin-top: 1rem;
     margin-left:0.5rem;
     margin-right:auto;
