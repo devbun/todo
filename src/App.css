@@ -1,3 +1,18 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+.description {
+  margin: 0.5rem;
+}
+
 body {
   overflow-y: scroll; /* Show vertical scrollbar */
   word-wrap: break-word;  
@@ -12,6 +27,7 @@ button {
 }
 
 .btn {
+  font-size: 0.75rem;
   width: 4rem;
   height: 1.25rem;
   padding: .25rem;
@@ -29,18 +45,49 @@ button {
   border: 1px solid;
 }
 
-.todoTable {
+.todo-column {
+  background-color: whitesmoke;
   margin-left: auto;
   margin-right: auto;
   padding: 0.5rem;
-  width: 200px;
-  border: 1px solid grey;
+  width: 260px;
+  border: 1px solid white;
+  border-radius: 5px;
+  max-height: 750px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.todoTable {
+  width: 250px;
+  min-height: 215px;
+  max-height: 615px;
+  overflow: hidden;
+  overflow-y: scroll;
 }
 
 .todoCard {
-  border: 1px solid grey;
+  background-color: white;
+  border: 1px solid white;
   padding: 0.5rem;
   margin-bottom: 0.5rem;
+  border-radius: 5px;
+  box-shadow: 0px 3px lightgray;
+}
+
+.todo-card-line {
+  margin-bottom: 0.25rem;
+}
+
+.todo-card-title {
+  width: 100%;
+  font-size: 1.25rem;
+}
+
+.todo-list-description {
+  font-style: italic;
 }
 
 .todoTopBar {
@@ -52,7 +99,6 @@ button {
   .done-button {
     height: 1rem;
     width: 1rem;
-    margin-right: 1rem;
   }
 
   .done {
@@ -67,11 +113,12 @@ button {
   .newtodo {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: flex-start;
     width: 200px;
-    height:200px;
-    margin-left:auto;
+    height:100px;
+    margin-top: 1rem;
+    margin-left:0.5rem;
     margin-right:auto;
   }
 
@@ -87,5 +134,10 @@ button {
     flex-direction: row;
     justify-content: flex-start;
     width:100%;
-    margin-bottom: 0.5 rem;
+    padding-bottom: 0.5rem;
   }
+
+  /* .main-area {
+    display: flex;
+    flex-direction: row;
+  } */

@@ -1,11 +1,11 @@
-import { click } from '@testing-library/user-event/dist/click';
 import React, { Component, useState } from 'react';
-import { isDOMComponent } from 'react-dom/test-utils';
 import './App.css';
 
 var _ = require('lodash');
 
+var list_of_todo_lists = JSON.parse(localStorage.getItem("lists") || "[]");
 var todoList = JSON.parse(localStorage.getItem("todoList") || "[]");
+var todoList2 = JSON.parse(localStorage.getItem("todoList2") || "[]");
 var displayAll = false
 
 for (let i = 0; i < todoList.length; i++) {
@@ -14,7 +14,7 @@ for (let i = 0; i < todoList.length; i++) {
   }}
 
 class Todo {
-  constructor(name, description, priority) {
+  constructor(name, description, priority, list) {
   this.idee = Date.now()
   this.date = new Date();
 
@@ -24,9 +24,10 @@ class Todo {
   this.name = name;
   this.description = description; //Todo: Add support for sub lists and stuff
   this.priority = priority;
+  this.list = list;
 
   todoList.push(this)
-  localStorage.setItem("todoList", JSON.stringify(todoList));
+  localStorage.setItem(todoList, JSON.stringify(this.list));
   console.log("ID is " + this.idee)
   }
 }
@@ -45,6 +46,7 @@ constructor (props) {
 
   this.toggledone = this.toggledone.bind(this);
   this.expand = this.expand.bind(this);
+  this.collapse = this.collapse.bind(this);
   this.remove = this.remove.bind(this);
   this.refresh = this.props.refresh.bind(this);
 
@@ -60,6 +62,7 @@ constructor (props) {
     if (todoList[i].idee == this.state.todo.idee) {
       console.log("deleted " + todoList[i].name)
 
+        //Q: Why is this a toggle???
       if (todoList[i].deleted == true) {
         todoList[i].deleted = false;
       } else {
@@ -74,12 +77,12 @@ constructor (props) {
 }
 
  expand() {
-  console.log('clicked')
-  if (this.state.expand == true) {
-   this.setState({expand: false});
-  } else {
    this.setState({expand: true});
-  }
+  // document.getElementById(this.props.todo.idee).scrollIntoView({behavior: "smooth"});
+}
+
+collapse() {
+  this.setState({expand: false});
 }
 
 toggledone() {
@@ -106,26 +109,25 @@ toggledone() {
 
   let stringArray = (date.toString()).split("");   // spliting string into array of characters
   let displayDate = stringArray.slice(0, 10).join("")
-  console.log(displayDate)
 
   if (expand == false) {
    return (
-     <div className='todoCard' >
+     <div className='todoCard'id={idee} >
        <div className="todoTopBar" >
         <div className={ done ? 'done-button done' : 'done-button notdone' } onClick={ ()=>this.toggledone()}></div>
-        <div className="todo-card-title" onClick={this.expand}>{name}</div>
+        <div className="todo-card-title" onClick= {this.expand}>{name}</div>
        </div>
      </div>
    )} else {
     return (
-      <div className='todoCard' >
+      <div className='todoCard' id={idee}>
       <div className="todoTopBar" >
       <div className={ done ? 'done-button done' : 'done-button notdone' } onClick={ ()=>this.toggledone()}></div>
-      <div className="todo-card-title" onClick={this.expand}>{name}</div>
+      <div className="todo-card-line todo-card-title" onClick={this.collapse}>{name}</div>
       </div>
-      <div>{description}</div>
-      <div>{priority} Priority</div>
-      <div>{displayDate}</div>
+      <div className='todo-card-line todo-card-description'>{description}</div>
+      <div className='todo-card-line todo-card-priority'>{priority} Priority</div>
+      <div className='todo-card-line todo-card-date-created'>{displayDate}</div>
       <span id="removeTodo" onClick={ ()=>this.remove()} className="btn delete-todo">DELETE</span>
     </div>
    )}
@@ -136,11 +138,16 @@ class NewTodoExpansion extends React.Component {
 
   render() {
     return (
-      <div >
+      <div new-todo-expanded>
 
         <div className="new-todo-row">
          <label htmlFor="entry-description">Description: </label>
          <input type="text" id="entry-description" />
+        </div>
+
+        <div className="new-todo-row">
+         <label htmlFor="entry-description">Deadline: </label>
+         <input type="date" id="new-todo-deadline" name="new-todo-deadline"  />
         </div>
     
       <div className="new-todo-row">     
@@ -192,39 +199,56 @@ render() {
   if (this.state.expand == false ) {
   return (
     <div className="newtodo">
-        <h2>New Todo</h2>
-        <div className="new-todo-form">
-          <div className="new-todo-row">
-            <label htmlFor="title">Title: </label>
-            <input name="title" type="text" id="entry" onFocus={this.expand} />
-          </div>
-
-          <button type="submit" onClick={this.addHandle}>Add</button>
-        </div>
+      <input name="title" type="text" id="entry" onFocus={this.expand} placeholder="+ Add a card" />
     </div>
   )} else {
     return (
       <div className="newtodo">
-          <h2>New Todo</h2>
-          <div className="new-todo-form">
-            <div>
-              <label htmlFor="title">Title: </label>
-              <input name="title" type="text" id="entry" />
+            <div className="new-todo-row">
+              {/* <label htmlFor="title">Title: </label> */}
+              <input name="title" type="text" id="entry" placeholder='Please enter title...' autoFocus />
             </div>
-            <NewTodoExpansion />
-            <button type="submit" onClick={this.addHandle}>Add</button>
-          </div>
+            
+              <div className="new-todo-row">
+              {/* <label htmlFor="entry-description">Description: </label> */}
+              <input type="textarea" id="entry-description" placeholder='Please enter description...' />
+              </div>
+
+              <div className="new-todo-row">
+              <label htmlFor="entry-description">Start: </label>
+              <input type="date" id="new-todo-start" name="new-todo-start"  />
+              </div>
+
+              <div className="new-todo-row">
+              <label htmlFor="entry-description">Deadline: </label>
+              <input type="date" id="new-todo-deadline" name="new-todo-deadline"  />
+              </div>
+          
+            <div className="new-todo-row">     
+              <label htmlFor="Low">Priority: </label>
+              <input type="radio" name="Priority" id="Low" value="Low"/>
+              <label htmlFor="Low">Low</label>
+
+              <input type="radio" name="Priority" id="Medium"  value="Medium" checked/>
+              <label htmlFor="Medium">Medium</label>
+
+              <input type="radio" name="Priority" id="High" value ="High" />
+              <label htmlFor="High">High</label>
+            </div>
+
+            <span className='btn submit-button' type="submit" onClick={this.addHandle}>Add</span>
       </div>
     )}
 }
 
 }
 
-class App extends React.Component {
+class IndividualTodoList extends React.Component {
   constructor (props) {
     super(props);
 
     this.state = {
+      // todoList: this.props.todoList
       todoList: todoList
     };
 
@@ -236,10 +260,10 @@ class App extends React.Component {
   addItem() {
     let newTitle = document.getElementById("entry").value
     if (newTitle == "") return alert("Please enter a title")
-    if (newTitle.length > 18) return alert("Title must not exceed 18 characters")
+    if (newTitle.length > 36) return alert("Title must not exceed 36 characters")
     let newDescription = document.getElementById("entry-description").value
     let newPriority = document.querySelector('input[name=Priority]:checked').value
-    new Todo(newTitle, newDescription, newPriority)
+    new Todo(newTitle, newDescription, newPriority, this.props.todoList)
     document.getElementById("entry").value = ""
     this.refresh()
   }
@@ -250,8 +274,48 @@ class App extends React.Component {
   }
 
   refresh() {
-    this.setState({todoList: todoList});
+    this.setState({todoList: this.props.todoList});
   }
+
+  render() {
+  return (
+    <div className="todo-list-individual">
+
+      <button className="displayAll" id="displayAll" onClick={this.toggleDisplay}>{displayAll? "Show Unfinished" : "Show All"} </button>
+
+      <div className="todo-column">
+        <div className="todoTable" id="todoTable">
+
+          {todoList.map((e)=>{
+              if (displayAll == false && e.done) return
+              if (e.deleted) return
+              var anyTodos = true;
+              return (
+              <TodoCard todo={e} refresh={this.refresh} /> 
+              );
+            }
+          )}
+        </div>
+        <NewTodo addItem={this.addItem}  />
+        </div>
+
+    </div>
+  );
+}
+}
+
+class App extends React.Component {
+  constructor (props) {
+    super(props);
+
+    this.state = {
+      listsoflists: list_of_todo_lists,
+      todoList: todoList,
+      todoList2: todoList2
+    };
+
+    };
+
 
   render() {
   return (
@@ -263,22 +327,12 @@ class App extends React.Component {
         {/* <button onClick={()=>{console.log(todoList)}}>todoList wat</button> */}
       </header>
 
-      <button className="displayAll" id="displayAll" onClick={this.toggleDisplay}>{displayAll? "Show Unfinished" : "Show All"} </button>
+      <div className="main-area">
 
-      <div className="todoTable" id="todoTable">
-
-        {todoList.map((e)=>{
-            if (displayAll == false && e.done) return
-            if (e.deleted) return
-            return (
-             <TodoCard todo={e} refresh={this.refresh} /> 
-            );
-          }
-        )}
-     
+      <IndividualTodoList todoList={this.todoList} />
+      {/* <IndividualTodoList todoList={this.todoList2} /> */}
+      
       </div>
-
-      <NewTodo addItem={this.addItem}  />
 
     </div>
   );
